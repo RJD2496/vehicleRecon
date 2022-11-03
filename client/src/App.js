@@ -1,24 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import VehicleList from './components/VehicleList';
+import VehicleInfo from './components/VehicleInfo';
+import VehicleEdit from './components/VehicleEdit';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import VehicleForm from './components/VehicleForm';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<VehicleList/>} path="/" default/>
+          <Route element={<VehicleForm/>} path="/vehicle/new"/>
+          <Route element={<VehicleInfo/>} path="/vehicle/:id"/>
+          <Route element={<VehicleEdit/>} path="/vehicle/:id/edit"/>
+        </Routes>
+      </BrowserRouter>
   );
 }
 

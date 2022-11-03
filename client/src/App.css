@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+#searchbar {
+  margin-right: 40rem;
+}
+
+.vehicleDetails {
+  font-size: 20px;
+}
+
+#vehicleInputContainer {
+  margin-left: 5rem;
+}

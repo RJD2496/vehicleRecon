@@ -7,22 +7,27 @@ const VehicleSchema = new mongoose.Schema({
     year: { type: Number, required: [true, "Year is required"], min: 1900, max: year},
     make: { type: String, required: [true, "Make is required"], minLength: [3, "Make must be at least 3 characters"]},
     model: { type: String, required: [true, "Model is required"], minLength: [3, "Model must be at least 3 characters"]},
+    odometer: { type: Number, required: [true, "Odometer is required"]},
     color: { type: String, required: [true, "Color is required"], minLength: [3, "Color must be at least 3 characters"]},
     cosmetics: {
         paint: [{
             panel: {type: String, required: [false], default: ""},
+            fee: {type: Number, required: [false], default: ""},
             desc: {type: String, required: [false], default: ""}
         }],
         airbrush: [{
             panel: {type: String, required: [false], default: ""},
+            fee: {type: Number, required: [false], default: ""},
             desc: {type: String, required: [false], default: ""}
         }],
         wheels: [{
             panel: {type: String, required: [false], default: ""},
+            fee: {type: Number, required: [false], default: ""},
             desc: {type: String, required: [false], default: ""}
         }],
         interior: [{
             panel: {type: String, required: [false], default: ""},
+            fee: {type: Number, required: [false], default: ""},
             desc: {type: String, required: [false], default: ""}
         }],
     }
