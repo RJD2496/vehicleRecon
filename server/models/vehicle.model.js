@@ -3,7 +3,7 @@ var currentTime = new Date()
 var year = currentTime.getFullYear()
 
 const VehicleSchema = new mongoose.Schema({
-    stock: { type: Number, required: [true], min: 100000, max: 999999 },
+    stock: { type: Number, required: [true], min: 0, max: 999999 },
     year: { type: Number, required: [true, "Year is required"], min: 1900, max: year},
     make: { type: String, required: [true, "Make is required"], minLength: [3, "Make must be at least 3 characters"]},
     model: { type: String, required: [true, "Model is required"], minLength: [3, "Model must be at least 3 characters"]},

@@ -45,6 +45,6 @@
   font-size: 20px;
 }
 
-#vehicleInputContainer {
-  margin-left: 5rem;
+.btn-circle.btn-xl {
+  border-radius: 50%;
 }
