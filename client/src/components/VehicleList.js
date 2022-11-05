@@ -45,7 +45,7 @@ const VehicleList = (props) => {
                             vehicles.map((vehicle, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td><Link to={`/vehicle/${vehicle._id}`}>{vehicle.stock}</Link></td>
+                                        <td><Link to={`/vehicle/${vehicle._id}`}>{vehicle._id}</Link></td>
                                         <td>{vehicle.year}</td>
                                         <td>{capitalizeFirst(vehicle.make)}</td>
                                         <td>{capitalizeFirst(vehicle.model)}</td>

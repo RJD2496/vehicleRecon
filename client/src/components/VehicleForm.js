@@ -7,11 +7,10 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/esm/Container';
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 
 const VehicleForm = (props) => {
-    const [vehicles, setVehicles] = useState([]);
-    const [stock, setStock] = useState(0);
-    const [year, setYear] = useState(0);
+    const [year, setYear] = useState();
     const [vehicleYears, setVehicleYears] = useState([]);
     const [make, setMake] = useState("");
     const [vehicleMakes, setVehicleMakes] = useState([]);
@@ -20,26 +19,75 @@ const VehicleForm = (props) => {
     const [odometer, setOdometer] = useState(0);
     const [color, setColor] = useState("");
     const [vehicleColors, setVehicleColors] = useState([]);
-    const [cosmetics, setCosmetics] = useState({});
+    const [paint, setPaint] = useState({});
+    const [wheels, setWheels] = useState({});
+    const [airbrush, setAirbrush] = useState({});
+    const [interior, setInterior] = useState({});
     const [errors, setErrors] = useState({});
+    const [show, setShow] = useState(false);
+    const [showError, setShowError] = useState(false);
     const [newPanelsPaint, setNewPanelsPaint] = useState([]);
     const [newPanelsWheels, setNewPanelsWheels] = useState([]);
     const [newPanelsAirbrush, setNewPanelsAirbrush] = useState([]);
     const [newPanelsInterior, setNewPanelsInterior] = useState([]);
     const navigate = useNavigate();
 
+    let testPanelsPaint = [];
+
     function addNewPanel(category) {
         if (category === "paint") {
-            setNewPanelsPaint([...newPanelsPaint, "Hello"]);
+            if (Object.keys(paint).length === 0) {
+                console.log("ERROR!")
+                setShowError(true);
+                setTimeout(() => setShowError(false), 4000);
+                return;
+            }
+            setShow(true);
+            setTimeout(() => setShow(false), 4000);
+            console.log(paint);
+            testPanelsPaint.push(paint);
+            
+            console.log(testPanelsPaint);
+            setPaint({});
         }
         else if (category === "wheels") {
-            setNewPanelsWheels([...newPanelsWheels, "Hello"]);
+            if (Object.keys(wheels).length === 0) {
+                console.log("ERROR!")
+                setShowError(true);
+                setTimeout(() => setShowError(false), 4000);
+                return;
+            }
+            setShow(true);
+            setTimeout(() => setShow(false), 4000);
+            setNewPanelsWheels([...newPanelsWheels, wheels]);
+            console.log(newPanelsWheels);
+            setWheels({});
         }
         else if (category === "airbrush") {
-            setNewPanelsAirbrush([...newPanelsAirbrush, "Hello"]);
+            if (Object.keys(airbrush).length === 0) {
+                console.log("ERROR!")
+                setShowError(true);
+                setTimeout(() => setShowError(false), 4000);
+                return;
+            }
+            setShow(true);
+            setTimeout(() => setShow(false), 4000);
+            setNewPanelsAirbrush([...newPanelsAirbrush, airbrush]);
+            console.log(newPanelsAirbrush);
+            setAirbrush({});
         }
         else if (category === "interior") {
-            setNewPanelsInterior([...newPanelsInterior, "Hello"]);
+            if (Object.keys(interior).length === 0) {
+                console.log("ERROR!")
+                setShowError(true);
+                setTimeout(() => setShowError(false), 4000);
+                return;
+            }
+            setShow(true);
+            setTimeout(() => setShow(false), 4000);
+            setNewPanelsInterior([...newPanelsInterior, interior]);
+            console.log(newPanelsInterior);
+            setInterior({});
         }
     }
     
@@ -122,22 +170,19 @@ const VehicleForm = (props) => {
         });
     }, []);
 
-    useEffect(() => {
-        axios.get("http://localhost:8000/vehicles")
-            .then(res => setVehicles(res.data))
-            .catch(err => console.log(err))
-    }, [])
-
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        console.log(vehicles.length);
+        const myJSON = JSON.stringify(testPanelsPaint);
         axios.post("http://localhost:8000/vehicle/create", {
-            stock,
             year,   
             make,
             model,
             odometer,
-            color
+            color,
+            myJSON,
+            newPanelsWheels,
+            newPanelsAirbrush,
+            newPanelsInterior
         })
             .then(res => {
                 console.log(res); 
@@ -149,8 +194,10 @@ const VehicleForm = (props) => {
                 setErrors(err.response.data.errors);
             })
     }
-
-
+    useEffect(() => {
+        const timer = setTimeout(() => console.log(""), 30);
+    }, []);     
+    
     return (
         <div className="col-8 mx-auto">
             <div className="d-flex justify-content-between align-items-center">
@@ -163,7 +210,6 @@ const VehicleForm = (props) => {
                     <Container>
                         <h4>Vehicle Description</h4>
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Control type="hidden" value={stock} onChange = {(e)=>setStock(vehicles.length)}/>
                             <Form.Label column sm="2">Year:</Form.Label>
                             <Col sm="4">
                                 <Form.Select value={year} onChange = {(e) => setYear(e.target.value)}>
@@ -228,8 +274,19 @@ const VehicleForm = (props) => {
                     </Container>
                     
                     <Container>
-                        {/*
                         <h4>Vehicle Cosmetics</h4>
+                        {   show &&
+                                <Alert variant="success" onClose={() => setShow(false)} dismissible>
+                                    <Alert.Heading>Saved!</Alert.Heading>
+                                    <p>Add a new panel if needed!</p>
+                                </Alert>
+                        }
+                        {   showError &&
+                                <Alert variant="danger" onClose={() => setShowError(false)} dismissible>
+                                    <Alert.Heading>Error!</Alert.Heading>
+                                    <p>Please enter fields before adding another panel</p>
+                                </Alert>
+                        }
                         <Row className="d-flex align-items-center mb-2">
                                 <Col><h5>Paint</h5></Col>
                                 <Col className="d-flex justify-content-end"><Button variant="primary" className="btn-circle btn-xl" onClick={() => addNewPanel("paint")}>+</Button></Col>
@@ -239,37 +296,33 @@ const VehicleForm = (props) => {
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2">Panel:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.paint} onChange = {(e)=>setCosmetics({...cosmetics.paint, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="String" value={paint.panel || ""} name="panel" onChange = {(e)=>setPaint({...paint, [e.target.name] : e.target.value})}/>
                             </Col>
                             <Form.Label column sm="2">Panel:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.wheels} onChange = {(e)=>setCosmetics({...cosmetics.paint, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="String" value={wheels.panel || ""} name="panel" onChange = {(e)=>setWheels({...wheels, [e.target.name] : e.target.value})}/>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2">Fee:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.paint} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="Number" value={paint.fee || ""} name="fee" onChange = {(e)=>setPaint({...paint, [e.target.name] : e.target.value})}/>
                             </Col>
                             <Form.Label column sm="2">Fee:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.wheels} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="Number" value={wheels.fee || ""} name="fee" onChange = {(e)=>setWheels({...wheels, [e.target.name] : e.target.value})}/>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2">Description:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.paint} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="String" value={paint.desc || ""} name="desc" onChange = {(e)=>setPaint({...paint, [e.target.name] : e.target.value})}/>
                             </Col>
                             <Form.Label column sm="2">Description:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.wheels} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="String" value={wheels.desc || ""} name="desc" onChange = {(e)=>setWheels({...wheels, [e.target.name] : e.target.value})}/>
                             </Col>
                         </Form.Group>
-                        <Row>
-                            <Col>{ newPanelsPaint.map((panel, index) => ( <NewPanelComponent cosmetics={cosmetics} setCosmetics={setCosmetics} /> ))}</Col>
-                            <Col>{ newPanelsWheels.map((panel, index) => ( <NewPanelComponent cosmetics={cosmetics} setCosmetics={setCosmetics} /> ))}</Col>
-                        </Row>
                         <Row className="d-flex align-items-center mb-2">
                                 <Col><h5>Airbrush</h5></Col>
                                 <Col className="d-flex justify-content-end"><Button variant="primary" className="btn-circle btn-xl" onClick={() => addNewPanel("airbrush")}>+</Button></Col>
@@ -279,38 +332,33 @@ const VehicleForm = (props) => {
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2">Panel:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.paint} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="String" value={airbrush.panel || ""} name="panel" onChange = {(e)=>setAirbrush({...airbrush, [e.target.name] : e.target.value})}/>
                             </Col>
                             <Form.Label column sm="2">Panel:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.wheels} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="String" value={interior.panel || ""} name="panel" onChange = {(e)=>setInterior({...interior, [e.target.name] : e.target.value})}/>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2">Fee:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.paint} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="Number" value={airbrush.fee || ""} name="fee" onChange = {(e)=>setAirbrush({...airbrush, [e.target.name] : e.target.value})}/>
                             </Col>
                             <Form.Label column sm="2">Fee:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.wheels} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="Number" value={interior.fee || ""} name="fee" onChange = {(e)=>setInterior({...interior, [e.target.name] : e.target.value})}/>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2">Description:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.paint} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="String" value={airbrush.desc || ""} name="desc" onChange = {(e)=>setAirbrush({...airbrush, [e.target.name] : e.target.value})}/>
                             </Col>
                             <Form.Label column sm="2">Description:</Form.Label>
                             <Col sm="4">
-                                <Form.Control type="String" value={cosmetics.wheels} onChange = {(e)=>setCosmetics({...cosmetics, [e.target.name] : e.target.value,})}/>
+                                <Form.Control type="String" value={interior.desc || ""} name="desc" onChange = {(e)=>setInterior({...interior, [e.target.name] : e.target.value})}/>
                             </Col>
                         </Form.Group>
-                        <Row>
-                            <Col>{ newPanelsAirbrush.map((panel, index) => ( <NewPanelComponent cosmetics={cosmetics} setCosmetics={setCosmetics} /> ))}</Col>
-                            <Col>{ newPanelsInterior.map((panel, index) => ( <NewPanelComponent cosmetics={cosmetics} setCosmetics={setCosmetics} /> ))}</Col>
-                        </Row>
-                                */}
                         <Button variant="primary" type="submit" className="mb-3">Submit</Button>
                     </Container>
                 </Container>

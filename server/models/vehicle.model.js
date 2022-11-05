@@ -1,36 +1,33 @@
 const mongoose = require('mongoose')
 var currentTime = new Date()
-var year = currentTime.getFullYear()
+var vehicleYear = (currentTime.getFullYear()+1);
 
 const VehicleSchema = new mongoose.Schema({
-    stock: { type: Number, required: [true], min: 0, max: 999999 },
-    year: { type: Number, required: [true, "Year is required"], min: 1900, max: year},
-    make: { type: String, required: [true, "Make is required"], minLength: [3, "Make must be at least 3 characters"]},
-    model: { type: String, required: [true, "Model is required"], minLength: [3, "Model must be at least 3 characters"]},
+    year: { type: Number, required: [true, "Year is required"], min: 1900, max: vehicleYear},
+    make: { type: String, required: [true, "Make is required"]},
+    model: { type: String, required: [true, "Model is required"]},
     odometer: { type: Number, required: [true, "Odometer is required"]},
-    color: { type: String, required: [true, "Color is required"], minLength: [3, "Color must be at least 3 characters"]},
-    cosmetics: {
-        paint: [{
-            panel: {type: String, required: [false], default: ""},
-            fee: {type: Number, required: [false], default: ""},
-            desc: {type: String, required: [false], default: ""}
-        }],
-        airbrush: [{
-            panel: {type: String, required: [false], default: ""},
-            fee: {type: Number, required: [false], default: ""},
-            desc: {type: String, required: [false], default: ""}
-        }],
-        wheels: [{
-            panel: {type: String, required: [false], default: ""},
-            fee: {type: Number, required: [false], default: ""},
-            desc: {type: String, required: [false], default: ""}
-        }],
-        interior: [{
-            panel: {type: String, required: [false], default: ""},
-            fee: {type: Number, required: [false], default: ""},
-            desc: {type: String, required: [false], default: ""}
-        }],
-    }
+    color: { type: String, required: [true, "Color is required"]},
+    paint: [{
+        panel: {type: String, required: [false]},
+        fee: {type: Number, required: [false]},
+        desc: {type: String, required: [false]}
+    }],
+    airbrush: [{
+        panel: {type: String, required: [false]},
+        fee: {type: Number, required: [false]},
+        desc: {type: String, required: [false]}
+    }],
+    wheels: [{
+        panel: {type: String, required: [false]},
+        fee: {type: Number, required: [false]},
+        desc: {type: String, required: [false]}
+    }],
+    interior: [{
+        panel: {type: String, required: [false]},
+        fee: {type: Number, required: [false]},
+        desc: {type: String, required: [false]}
+    }]
 }, { timestamps: true });
 
 module.exports = mongoose.model("Vehicle", VehicleSchema)

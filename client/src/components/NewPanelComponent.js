@@ -11,19 +11,19 @@ const NewPanelComponent = (props) => {
             <Form.Group as={Row} className="d-flex justify-content-between mb-3">
                 <Form.Label column sm="2">Panel:</Form.Label>
                 <Col sm="8">
-                    <Form.Control type="String" value={props.cosmetics.paint} onChange = {(e)=>props.setCosmetics({...props.cosmetics, [e.target.name] : e.target.value,})}/>
+                    <Form.Control type="String" value={props.category.panel || ""} name="panel" onChange = {(e)=>props.setCategory({...props.category, [e.target.name] : e.target.value})}/>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="d-flex justify-content-between mb-3">
                 <Form.Label column sm="2">Fee:</Form.Label>
                 <Col sm="8">
-                    <Form.Control type="String" value={props.cosmetics.paint} onChange = {(e)=>props.setCosmetics({...props.cosmetics, [e.target.name] : e.target.value,})}/>
+                    <Form.Control type="String" value={props.category.fee} name="fee" onChange = {(e)=>props.setCategory({...props.category, [e.target.name] : e.target.value,})}/>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="d-flex justify-content-between mb-3">
                 <Form.Label column sm="2">Description:</Form.Label>
                 <Col sm="8">
-                    <Form.Control type="String" value={props.cosmetics.paint} onChange = {(e)=>props.setCosmetics({...props.cosmetics, [e.target.name] : e.target.value,})}/>
+                    <Form.Control type="String" value={props.category.desc} name="desc" onChange = {(e)=>props.setCategory({...props.category, [e.target.name] : e.target.value,})}/>
                 </Col>
             </Form.Group>
         </div>
