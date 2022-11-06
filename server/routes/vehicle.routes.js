@@ -6,4 +6,5 @@ module.exports = (app) => {
     app.get("/vehicle/:id", VehicleController.getVehicle)
     app.put("/vehicle/edit/:id", VehicleController.updateVehicle)
     app.delete("/vehicle/delete/:id", VehicleController.deleteVehicle)
+    app.put("/vehicle/completecosmetic/:id/:category", VehicleController.completeCosmetics)
 }

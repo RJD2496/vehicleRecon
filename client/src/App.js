@@ -5,6 +5,7 @@ import VehicleInfo from './components/VehicleInfo';
 import VehicleEdit from './components/VehicleEdit';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import VehicleForm from './components/VehicleForm';
+import VehicleCosmetics from './components/VehicleCosmetics';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route element={<VehicleForm/>} path="/vehicle/new"/>
           <Route element={<VehicleInfo/>} path="/vehicle/:id"/>
           <Route element={<VehicleEdit/>} path="/vehicle/:id/edit"/>
+          <Route element={<VehicleCosmetics/>} path="/vehicle/:id/cosmetic"/>
         </Routes>
       </BrowserRouter>
   );

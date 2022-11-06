@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import NewPanelComponent from './NewPanelComponent';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -26,13 +25,13 @@ const VehicleForm = (props) => {
     const [errors, setErrors] = useState({});
     const [show, setShow] = useState(false);
     const [showError, setShowError] = useState(false);
+    const [errorsDesc, setErrorsDesc] = useState(false);
     const [newPanelsPaint, setNewPanelsPaint] = useState([]);
     const [newPanelsWheels, setNewPanelsWheels] = useState([]);
     const [newPanelsAirbrush, setNewPanelsAirbrush] = useState([]);
     const [newPanelsInterior, setNewPanelsInterior] = useState([]);
     const navigate = useNavigate();
 
-    let testPanelsPaint = [];
 
     function addNewPanel(category) {
         if (category === "paint") {
@@ -45,10 +44,10 @@ const VehicleForm = (props) => {
             setShow(true);
             setTimeout(() => setShow(false), 4000);
             console.log(paint);
-            testPanelsPaint.push(paint);
-            
-            console.log(testPanelsPaint);
-            setPaint({});
+            setNewPanelsPaint([...newPanelsPaint, paint]);
+            console.log("testpanelspaint below this line");
+            console.log(newPanelsPaint);
+            setPaint({}); 
         }
         else if (category === "wheels") {
             if (Object.keys(wheels).length === 0) {
@@ -103,7 +102,6 @@ const VehicleForm = (props) => {
         axios.request(optionsYears)
         .then(function (response) {
             setVehicleYears(response.data);
-            console.log(response.data);
         })
         .catch(function (error) {
             console.error(error);
@@ -123,7 +121,6 @@ const VehicleForm = (props) => {
         axios.request(optionsMakes)
         .then(function (response) {
             setVehicleMakes(response.data.data);
-            console.log(response.data.data);
         })
         .catch(function (error) {
             console.error(error);
@@ -143,7 +140,6 @@ const VehicleForm = (props) => {
         axios.request(optionsModels)
         .then(function (response) {
             setVehicleModels(response.data.data);
-            console.log(response.data.data);
         })
         .catch(function (error) {
             console.error(error);
@@ -163,26 +159,48 @@ const VehicleForm = (props) => {
         axios.request(optionsColors)
         .then(function (response) {
             setVehicleColors(response.data.data);
-            console.log(response.data.data);
         })
         .catch(function (error) {
             console.error(error);
         });
     }, []);
 
+    function notArray(category) {
+        if (category === "paint") {
+            if (newPanelsPaint.length > 0) {
+                console.log("in new panels pauint")
+                return newPanelsPaint;
+            } else return paint
+        }
+        else if (category === "airbrush") {
+            if (newPanelsAirbrush.length > 0) {
+                return newPanelsAirbrush;
+            } else return airbrush
+        }
+        else if (category === "wheels") {
+            if (newPanelsWheels.length > 0) {
+                return newPanelsWheels;
+            } else return wheels
+        }
+        else if (category === "interior") {
+            if (newPanelsInterior.length > 0) {
+                return newPanelsInterior;
+            } else return interior
+        }
+    }
+
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        const myJSON = JSON.stringify(testPanelsPaint);
         axios.post("http://localhost:8000/vehicle/create", {
             year,   
             make,
             model,
             odometer,
             color,
-            myJSON,
-            newPanelsWheels,
-            newPanelsAirbrush,
-            newPanelsInterior
+            paint:notArray("paint"),
+            airbrush:notArray("airbrush"),
+            wheels:notArray("wheels"),
+            interior:notArray("interior")
         })
             .then(res => {
                 console.log(res); 
@@ -191,12 +209,10 @@ const VehicleForm = (props) => {
             })
             .catch(err => {
                 console.log(err)
+                setErrorsDesc(true);
                 setErrors(err.response.data.errors);
             })
-    }
-    useEffect(() => {
-        const timer = setTimeout(() => console.log(""), 30);
-    }, []);     
+    }   
     
     return (
         <div className="col-8 mx-auto">
@@ -209,6 +225,16 @@ const VehicleForm = (props) => {
                 <Container className="col-8 mx-auto" id="vehicleInputContainer">
                     <Container>
                         <h4>Vehicle Description</h4>
+                        {   errorsDesc &&
+                                <Alert variant="danger" onClose={() => setErrorsDesc(false)} dismissible>
+                                    <Alert.Heading>Error!</Alert.Heading>
+                                    { errors.year ? <p className="errors">{errors.year.message}</p> : null }
+                                    { errors.odometer ? <p className="errors">{errors.odometer.message}</p> : null }
+                                    { errors.make ? <p className="errors">{errors.make.message}</p> : null }
+                                    { errors.color ? <p className="errors">{errors.color.message}</p> : null }
+                                    { errors.model ? <p className="errors">{errors.model.message}</p> : null }
+                                </Alert>
+                        }
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2">Year:</Form.Label>
                             <Col sm="4">
@@ -228,6 +254,7 @@ const VehicleForm = (props) => {
                                 <Form.Control type="number" value={odometer} onChange = {(e)=>setOdometer(e.target.value)}/>
                             </Col>
                         </Form.Group>
+                        
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2">Make:</Form.Label>
                             <Col sm="4">
@@ -244,6 +271,7 @@ const VehicleForm = (props) => {
                             </Col>
                             <Form.Label column sm="2">Color:</Form.Label>
                             <Col sm="4">
+                            
                                 <Form.Select value={color} onChange = {(e) => setColor(e.target.value)}>
                                     <option value="" disabled selected>Choose Color</option>
                                     {
@@ -256,9 +284,11 @@ const VehicleForm = (props) => {
                                 </Form.Select>
                             </Col>
                         </Form.Group>
+                        
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2">Model:</Form.Label>
                             <Col sm="4">
+                            
                                 <Form.Select value={model} onChange = {(e) => setModel(e.target.value)}>
                                     <option value="" disabled selected>Choose Model</option>
                                     {

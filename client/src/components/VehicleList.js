@@ -4,18 +4,13 @@ import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 
 const VehicleList = (props) => {
-    const[vehicles, setVehicles] = useState([]);
+    const[ vehicles, setVehicles] = useState([]);
 
     useEffect(() => {
         axios.get("http://localhost:8000/vehicles")
             .then(res => setVehicles(res.data))
             .catch(err => console.log(err))
     }, [])
-
-    const capitalizeFirst = str => {
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    };
-
 
     return (
         <div className="col-8 mx-auto">
@@ -47,12 +42,12 @@ const VehicleList = (props) => {
                                     <tr key={index}>
                                         <td><Link to={`/vehicle/${vehicle._id}`}>{vehicle._id}</Link></td>
                                         <td>{vehicle.year}</td>
-                                        <td>{capitalizeFirst(vehicle.make)}</td>
-                                        <td>{capitalizeFirst(vehicle.model)}</td>
+                                        <td>{vehicle.make}</td>
+                                        <td>{vehicle.model}</td>
                                         <td>{vehicle.odometer}</td>
-                                        <td>{capitalizeFirst(vehicle.color)}</td>
+                                        <td>{vehicle.color}</td>
                                     </tr>
-                                )
+                                );
                             })
                         }
                     </tbody>

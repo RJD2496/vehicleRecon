@@ -48,3 +48,11 @@
 .btn-circle.btn-xl {
   border-radius: 50%;
 }
+
+.errors {
+  color: red;
+}
+
+.operations {
+  padding-left: 20px;
+}
