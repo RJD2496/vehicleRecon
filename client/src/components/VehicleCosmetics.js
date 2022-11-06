@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import {useParams, Link, useNavigate} from "react-router-dom";
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 import Table from 'react-bootstrap/Table';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -39,25 +37,19 @@ const VehicleCosmetics = (props) => {
                 console.log(airbrush);
                 console.log(interior)
         console.log(paint?.length);
-        console.log(airbrush?.length);
+        console.log(airbrush?.length); // wheels?.[0]?.panel === undefined
         console.log(wheels?.length);
-        console.log(paint?.length);
-        console.log(interior?.[0]?.panel);
-        if (interior?.[0]?.panel === undefined) {
-            console.log("interior is undefined")
-        } else {
-            console.log("interior is defined");
-        }
-        if (paint?.length >= 1 || "panel" in paint) {
+        console.log(paint?.length); // hello
+        if (paint?.length > 0 && paint?.[0]?.panel !== undefined) {
             setShowPaint(true);
         }
-        if (airbrush?.length > 0 && "panel" in airbrush) {
+        if (airbrush?.length > 0 && airbrush?.[0]?.panel !== undefined) {
             setShowAirbrush(true);
         }
-        if (wheels?.length > 0 && "panel" in wheels) {
+        if (wheels?.length > 0 && wheels?.[0]?.panel !== undefined) {
             setShowWheels(true);
         }
-        if (interior?.length > 0 || "panel" in interior) {
+        if (interior?.length > 0 && interior?.[0]?.panel !== undefined) {
             console.log("showing interior");
             setShowInterior(true);
         }

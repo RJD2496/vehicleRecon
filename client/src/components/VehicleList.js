@@ -5,6 +5,7 @@ import Table from 'react-bootstrap/Table';
 
 const VehicleList = (props) => {
     const[ vehicles, setVehicles] = useState([]);
+    const [searchInput, setSearchInput] = useState("");
 
     useEffect(() => {
         axios.get("http://localhost:8000/vehicles")
@@ -15,9 +16,10 @@ const VehicleList = (props) => {
     return (
         <div className="col-8 mx-auto">
             <div className="d-flex justify-content-between align-items-center">
-                <h1>Vehicle Gateway</h1>
+                <h1>Vehicle GateWay</h1>
                 <div className="col-8">
-                    <input type="text" className="form-control form-control-md" placeholder="Search..."/>
+                    <input type="text" value={searchInput} className="form-control form-control-md" placeholder="Search..." onChange={(e) => setSearchInput(e.target.value)}
+                    />
                 </div>
             </div>
             <div className="d-flex justify-content-end">
@@ -36,8 +38,13 @@ const VehicleList = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            vehicles.map((vehicle, index) => {
+                        {vehicles.filter(vehicle => {
+                            if (searchInput === "") {
+                                return vehicle;
+                            } else if (vehicle._id.includes(searchInput)) {
+                                return vehicle;
+                            }
+                        }).map((vehicle, index) => {
                                 return (
                                     <tr key={index}>
                                         <td><Link to={`/vehicle/${vehicle._id}`}>{vehicle._id}</Link></td>
