@@ -11,7 +11,7 @@ const VehicleInfo = (props) => {
     const {id} = useParams();
     const navigate = useNavigate();
 
-
+    // retrieves vehicle data
     useEffect(() => {
         axios.get("http://localhost:8000/vehicle/" + id)
             .then( res => {
@@ -21,6 +21,7 @@ const VehicleInfo = (props) => {
             .catch( err => console.log(err) )
     }, [])
 
+    // deletes vehicle if delete button is clicked
     const deleteVehicle = (vehicleId) => {
         axios.delete("http://localhost:8000/vehicle/delete/" + vehicleId)
             .then(res => {
@@ -31,15 +32,15 @@ const VehicleInfo = (props) => {
 
 
     return (
-        <div className="col-8 mx-auto">
-            <div className="d-flex justify-content-between align-items-center">
-                <h1>Vehicle GateWay</h1>
+        <Container className="col-8 mx-auto">
+            <Container className="d-flex justify-content-between align-items-center">
+                <h1>Vehicle Recon</h1>
                 <Link to= {"/"}>Home</Link>
-            </div>
-            <div className="d-flex justify-content-start">
+            </Container>
+            <Container className="d-flex justify-content-start">
                 <h3>{vehicle.year} {vehicle.make} {vehicle.model} | Stock: {vehicle._id} | Color: {vehicle.color} | Odometer: {vehicle.odometer}</h3>
-            </div> 
-            <div className="mb-3">
+            </Container> 
+            <Container className="mb-3">
                 <Nav variant="tabs" defaultActiveKey="info">
                     <Nav.Item>
                         <Nav.Link eventKey="info" href={`/vehicle/${vehicle._id}`}>Info</Nav.Link>
@@ -48,12 +49,12 @@ const VehicleInfo = (props) => {
                         <Nav.Link href={`/vehicle/${vehicle._id}/cosmetic`}>Cosmetic</Nav.Link>
                     </Nav.Item>
                 </Nav>
-            </div>
-            <div className="d-flex justify-content-between align-items-center col-4">
-                <h4>Vehicle Details</h4>
-                <Link to={`/vehicle/${vehicle._id}/edit`}><button className="btn btn-primary">Edit</button></Link>
+            </Container>
+            <Container className="d-flex">
+                <h4 className="me-2">Vehicle Details</h4>
+                <Link to={`/vehicle/${vehicle._id}/edit`} className="me-2"><button className="btn btn-primary">Edit</button></Link>
                 <button className="btn btn-danger" onClick= { (e)=> {deleteVehicle(vehicle._id)} }>Delete Vehicle</button>
-            </div>
+            </Container>
             <Container className="vehicleDetails">
                 <Row>
                     <Col xs={2}>Year:</Col>
@@ -72,7 +73,7 @@ const VehicleInfo = (props) => {
                     <Col xs={2}>{vehicle.model}</Col>
                 </Row>
             </Container>
-        </div>
+        </Container>
     );
 }
 

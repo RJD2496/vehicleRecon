@@ -4,7 +4,6 @@ import {useParams, Link, useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/esm/Container';
 import Button from 'react-bootstrap/esm/Button';
 
@@ -19,7 +18,7 @@ const VehicleEdit = (props) => {
     const [vehicleColors, setVehicleColors] = useState([]);
     const navigate = useNavigate();
 
-
+    // retrieves vehicle data
     useEffect(() => {
         axios.get("http://localhost:8000/vehicle/" + id)
             .then( res => {
@@ -35,6 +34,7 @@ const VehicleEdit = (props) => {
             .catch( err => console.log(err) )
     }, [])
 
+    // API call for color options
     useEffect(() => {
         const optionsColors= {
             method: 'GET',
@@ -54,6 +54,7 @@ const VehicleEdit = (props) => {
         });
     }, []);
 
+    // Submits and redirects if no error
     const onSubmitHandler = (e) => {
         e.preventDefault();
         axios.put('http://localhost:8000/vehicle/edit/' + id, {
@@ -62,23 +63,22 @@ const VehicleEdit = (props) => {
         })
             .then(res => {
                 console.log(res);
-                navigate("/");
+                navigate(`/vehicle/${id}`);
             })
             .catch(err => console.log(err))
     }
 
 
     return (
-        <div className="col-8 mx-auto">
-            
-            <div className="d-flex justify-content-between align-items-center">
-                <h1>Vehicle GateWay</h1>
+        <Container className="col-8 mx-auto">
+            <Container className="d-flex justify-content-between align-items-center">
+                <h1>Vehicle Recon</h1>
                 <Link to= {"/"}>Home</Link>
-            </div>
-            <div className="d-flex justify-content-start">
+            </Container>
+            <Container>
                 <h3>{year} {make} {model} | Stock: {stock} | Color: {color} | Odometer: {odometer}</h3>
-            </div> 
-            <h4>Vehicle Details</h4>
+                <h4>Vehicle Details</h4>
+            </Container>
             <Form onSubmit={onSubmitHandler}>
                 <Container className="vehicleDetails">
                     <Row className="mb-2">
@@ -111,12 +111,7 @@ const VehicleEdit = (props) => {
                     <Button variant="primary" type="submit" className="mb-3">Submit</Button>
                 </Container>
             </Form>
-                
-
-                
-                
-            
-        </div> 
+        </Container> 
     );
 }
 

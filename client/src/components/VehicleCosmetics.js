@@ -5,6 +5,7 @@ import Table from 'react-bootstrap/Table';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Nav from 'react-bootstrap/Nav';
+import Container from 'react-bootstrap/esm/Container';
 
 
 const VehicleCosmetics = (props) => {
@@ -19,6 +20,7 @@ const VehicleCosmetics = (props) => {
     const [wheels, setWheels] = useState([]);
     const [interior, setInterior] = useState([]);
 
+    // retrieves vehicle data
     useEffect(() => {
         axios.get("http://localhost:8000/vehicle/" + id)
             .then( res => {
@@ -31,15 +33,8 @@ const VehicleCosmetics = (props) => {
             .catch( err => console.log(err) )
     }, [])
 
+    // sets vehicle cosmetics to true if any exists
     useEffect(() => {
-        console.log(paint);
-                console.log(wheels);
-                console.log(airbrush);
-                console.log(interior)
-        console.log(paint?.length);
-        console.log(airbrush?.length); // wheels?.[0]?.panel === undefined
-        console.log(wheels?.length);
-        console.log(paint?.length); // hello
         if (paint?.length > 0 && paint?.[0]?.panel !== undefined) {
             setShowPaint(true);
         }
@@ -50,11 +45,11 @@ const VehicleCosmetics = (props) => {
             setShowWheels(true);
         }
         if (interior?.length > 0 && interior?.[0]?.panel !== undefined) {
-            console.log("showing interior");
             setShowInterior(true);
         }
     })
 
+    // completes vehicle operation once confirmed by user
     const completeOperation = (vehicleId, category) => {
         confirmAlert({
             title: 'Confirm',
@@ -81,16 +76,16 @@ const VehicleCosmetics = (props) => {
 
 
     return (
-        <div className="col-8 mx-auto">
+        <Container className="col-8 mx-auto">
 
-            <div className="d-flex justify-content-between align-items-center">
-                <h1>Vehicle GateWay</h1>
+            <Container className="d-flex justify-content-between align-items-center">
+                <h1>Vehicle Recon</h1>
                 <Link to= {"/"}>Home</Link>
-            </div>
-            <div className="d-flex justify-content-start">
+            </Container>
+            <Container className="d-flex justify-content-start">
                 <h3>{vehicle.year} {vehicle.make} {vehicle.model} | Stock: {vehicle._id} | Color: {vehicle.color} | Odometer: {vehicle.odometer}</h3>
-            </div> 
-            <div className="mb-3">
+            </Container> 
+            <Container className="mb-3">
                 <Nav variant="tabs" defaultActiveKey="cosmetic">
                     <Nav.Item>
                         <Nav.Link href={`/vehicle/${vehicle._id}`}>Info</Nav.Link>
@@ -99,13 +94,13 @@ const VehicleCosmetics = (props) => {
                         <Nav.Link eventKey="cosmetic" href={`/vehicle/${vehicle._id}/cosmetic`}>Cosmetic</Nav.Link>
                     </Nav.Item>
                 </Nav>
-            </div>
+            </Container>
             <h4>Vehicle Cosmetics</h4>
 
             { showPaint && 
-                <div>
+                <Container>
                     <h5>Paint</h5>
-                    <div className="ms-5">
+                    <Container className="ms-5">
                         <button className="btn btn-primary mb-2" onClick= { (e)=> {completeOperation(vehicle._id, "paint")} }>Complete</button>
                         <Table striped bordered hover>
                             <thead>
@@ -129,13 +124,13 @@ const VehicleCosmetics = (props) => {
                             }   
                             </tbody>
                         </Table>
-                    </div>
-                </div>
+                    </Container>
+                </Container>
             }
             { showAirbrush && 
-                <div>
+                <Container>
                     <h5>Airbrush</h5>
-                    <div className="ms-5">
+                    <Container className="ms-5">
                         <button className="btn btn-primary mb-2" onClick= { (e)=> {completeOperation(vehicle._id, "airbrush")} }>Complete</button>
                         <Table striped bordered hover>
                             <thead>
@@ -159,13 +154,13 @@ const VehicleCosmetics = (props) => {
                             }   
                             </tbody>
                         </Table>
-                    </div>
-                </div>
+                    </Container>
+                </Container>
             }
             { showWheels && 
-                <div>
+                <Container>
                     <h5>Wheels</h5>
-                    <div className="ms-5">
+                    <Container className="ms-5">
                         <button className="btn btn-primary mb-2" onClick= { (e)=> {completeOperation(vehicle._id, "wheels")} }>Complete</button>
                         <Table striped bordered hover>
                             <thead>
@@ -189,13 +184,13 @@ const VehicleCosmetics = (props) => {
                             }   
                             </tbody>
                         </Table>
-                    </div>
-                </div>
+                    </Container>
+                </Container>
             }
             { showInterior && 
-                <div>
+                <Container>
                     <h5>Interior</h5>
-                    <div className="ms-5">
+                    <Container className="ms-5">
                         <button className="btn btn-primary mb-2" onClick= { (e)=> {completeOperation(vehicle._id, "interior")} }>Complete</button>
                         <Table striped bordered hover>
                             <thead>
@@ -219,10 +214,10 @@ const VehicleCosmetics = (props) => {
                             }   
                             </tbody>
                         </Table>
-                    </div>
-                </div>
+                    </Container>
+                </Container>
             }
-        </div>
+        </Container>
     );
 }
 

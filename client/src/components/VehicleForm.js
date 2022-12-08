@@ -32,7 +32,7 @@ const VehicleForm = (props) => {
     const [newPanelsInterior, setNewPanelsInterior] = useState([]);
     const navigate = useNavigate();
 
-
+    // adds a new panel to newPanels array based on the category thats provided when the button is clicked to add a new panel
     function addNewPanel(category) {
         if (category === "paint") {
             if (Object.keys(paint).length === 0) {
@@ -90,6 +90,7 @@ const VehicleForm = (props) => {
         }
     }
     
+    // api call for vehicle years
     useEffect(() => {
         const optionsYears= {
             method: 'GET',
@@ -108,6 +109,7 @@ const VehicleForm = (props) => {
         });
     }, []);
     
+    // api call for vehicle makes
     useEffect(() => {
         const optionsMakes= {
             method: 'GET',
@@ -127,6 +129,7 @@ const VehicleForm = (props) => {
         });
     }, []);
 
+    // api call for vehicle models
     useEffect(() => {
         const optionsModels= {
             method: 'GET',
@@ -146,6 +149,7 @@ const VehicleForm = (props) => {
         });
     }, []);
 
+    // api call for vehicle colors
     useEffect(() => {
         const optionsColors= {
             method: 'GET',
@@ -165,6 +169,7 @@ const VehicleForm = (props) => {
         });
     }, []);
 
+    // checks if any new panels were added by the user if not function returns the current input from the user which is either nothing or one single panel
     function notArray(category) {
         if (category === "paint") {
             if (newPanelsPaint.length > 0) {
@@ -189,6 +194,7 @@ const VehicleForm = (props) => {
         }
     }
 
+    // post request when user submits
     const onSubmitHandler = (e) => {
         e.preventDefault();
         axios.post("http://localhost:8000/vehicle/create", {
@@ -215,12 +221,14 @@ const VehicleForm = (props) => {
     }   
     
     return (
-        <div className="col-8 mx-auto">
-            <div className="d-flex justify-content-between align-items-center">
-                <h1>Vehicle GateWay</h1>
+        <Container className="col-8 mx-auto">
+            <Container className="d-flex justify-content-between align-items-center">
+                <h1>Vehicle Recon</h1>
                 <Link to={"/"}>Home</Link>
-            </div>
-            <h3>Add New Vehicle</h3>
+            </Container>
+            <Container>
+                <h3>Add New Vehicle</h3>
+            </Container>
             <Form onSubmit={onSubmitHandler}>
                 <Container className="col-8 mx-auto" id="vehicleInputContainer">
                     <Container>
@@ -393,7 +401,7 @@ const VehicleForm = (props) => {
                     </Container>
                 </Container>
             </Form>
-        </div>
+        </Container>
     );
 }
 

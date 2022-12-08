@@ -2,11 +2,13 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
+import Container from 'react-bootstrap/Container';
 
 const VehicleList = (props) => {
     const[ vehicles, setVehicles] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
+    // retrieves all vehicles 
     useEffect(() => {
         axios.get("http://localhost:8000/vehicles")
             .then(res => setVehicles(res.data))
@@ -14,18 +16,18 @@ const VehicleList = (props) => {
     }, [])
 
     return (
-        <div className="col-8 mx-auto">
-            <div className="d-flex justify-content-between align-items-center">
-                <h1>Vehicle GateWay</h1>
-                <div className="col-8">
+        <Container className="col-8 mx-auto">
+            <Container className="d-flex justify-content-between align-items-center">
+                <h1>Vehicle Recon</h1>
+                <Container className="col-8">
                     <input type="text" value={searchInput} className="form-control form-control-md" placeholder="Search..." onChange={(e) => setSearchInput(e.target.value)}
                     />
-                </div>
-            </div>
-            <div className="d-flex justify-content-end">
+                </Container>
+            </Container>
+            <Container className="d-flex justify-content-end">
                 <Link to="/vehicle/new"><button className="btn btn-primary">Add Vehicle</button></Link>
-            </div>
-            <div className="mt-2">
+            </Container>
+            <Container className="mt-2">
                 <Table striped bordered hover>
                     <thead>
                         <tr>
@@ -59,8 +61,8 @@ const VehicleList = (props) => {
                         }
                     </tbody>
                 </Table>
-            </div>
-        </div>
+            </Container>
+        </Container>
     );
 }
 
