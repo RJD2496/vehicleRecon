@@ -20,7 +20,7 @@ const VehicleCosmetics = (props) => {
     const [wheels, setWheels] = useState([]);
     const [interior, setInterior] = useState([]);
 
-    // retrieves vehicle data
+    // retrieves vehicle data to display
     useEffect(() => {
         axios.get("http://localhost:8000/vehicle/" + id)
             .then( res => {
